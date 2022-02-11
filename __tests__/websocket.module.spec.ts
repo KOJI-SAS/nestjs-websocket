@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { Module, Injectable, Get, Controller } from '@nestjs/common'
-import * as request from 'supertest'
+import request from 'supertest'
 import { platforms } from './utils/platforms'
 import { extraWait } from './utils/extraWait'
 import { OnOpen, WebSocketModule } from '../src'

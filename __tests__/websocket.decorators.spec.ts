@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { Module, Controller, Get, Injectable } from '@nestjs/common'
-import * as request from 'supertest'
+import request from 'supertest'
 import { platforms } from './utils/platforms'
 import { extraWait } from './utils/extraWait'
 import {

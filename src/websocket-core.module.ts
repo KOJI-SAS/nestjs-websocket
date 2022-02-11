@@ -1,6 +1,7 @@
 import { DynamicModule, Global, Inject, Module, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
 import { DiscoveryModule, DiscoveryService, MetadataScanner, ModuleRef, Reflector } from '@nestjs/core'
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import * as WebSocket from 'ws'
 import { WEBSOCKET_PROVIDER_NAME, WEBSOCKET_EVENT_METADATA } from './websocket.constants'
 import { WebSocketModuleOptions, WebSocketModuleAsyncOptions, WebSocketEventMetadata } from './websocket.interface'
@@ -53,7 +54,7 @@ export class WebSocketCoreModule implements OnApplicationBootstrap, OnApplicatio
   }
 
   private listenToClientEvents(wrappers: InstanceWrapper<any>[]): void {
-    const ws = this.moduleRef.get<WebSocket>(this.providerName)
+    const ws = this.moduleRef.get<ReconnectingWebSocket>(this.providerName)
 
     wrappers.forEach((wrapper) => {
       const { instance } = wrapper ?? {}
@@ -66,7 +67,7 @@ export class WebSocketCoreModule implements OnApplicationBootstrap, OnApplicatio
           const metadata = this.reflector.get<WebSocketEventMetadata>(WEBSOCKET_EVENT_METADATA, callback)
 
           if (metadata) {
-            ws.on(metadata.event, (...args: unknown[]) => {
+            ws.addEventListener(metadata.event as any, (...args: unknown[]) => {
               callback.call(instance, ...args)
             })
           }
@@ -76,11 +77,10 @@ export class WebSocketCoreModule implements OnApplicationBootstrap, OnApplicatio
   }
 
   onApplicationShutdown() {
-    const ws = this.moduleRef.get<WebSocket>(this.providerName)
+    const ws = this.moduleRef.get<ReconnectingWebSocket>(this.providerName)
 
     if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.removeAllListeners()
-      ws.terminate()
+      ws.close()
     }
   }
 }

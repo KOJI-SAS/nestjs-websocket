@@ -1,11 +1,12 @@
 import { Provider } from '@nestjs/common'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import WebSocket from 'reconnecting-websocket'
 import { defer, lastValueFrom } from 'rxjs'
 import { WEBSOCKET_MODULE_OPTIONS, WEBSOCKET_PROVIDER_NAME } from './websocket.constants'
 import { WebSocketModuleAsyncOptions, WebSocketModuleOptions } from './websocket.interface'
 import { getWebSocketToken } from './websocket.utils'
 
-async function createWebSocket(_options: WebSocketModuleOptions): Promise<WebSocket> {
+async function createWebSocket(_options: WebSocketModuleOptions): Promise<ReconnectingWebSocket> {
   try {
     const { url, protocols, options } = _options
     let ws: WebSocket
@@ -25,7 +26,7 @@ async function createWebSocket(_options: WebSocketModuleOptions): Promise<WebSoc
 export function createWebSocketProvider(options: WebSocketModuleOptions): Provider {
   return {
     provide: getWebSocketToken(),
-    useFactory: async (): Promise<WebSocket> => {
+    useFactory: async (): Promise<ReconnectingWebSocket> => {
       return await lastValueFrom(defer(() => createWebSocket(options)))
     },
   }
@@ -34,7 +35,7 @@ export function createWebSocketProvider(options: WebSocketModuleOptions): Provid
 export function createWebSocketAsyncProvider(): Provider {
   return {
     provide: getWebSocketToken(),
-    useFactory: async (options: WebSocketModuleOptions): Promise<WebSocket> => {
+    useFactory: async (options: WebSocketModuleOptions): Promise<ReconnectingWebSocket> => {
       return lastValueFrom(defer(() => createWebSocket(options)))
     },
     inject: [WEBSOCKET_MODULE_OPTIONS],
