@@ -1,9 +1,9 @@
-import WebSocket from 'reconnecting-websocket'
-import { getWebSocketToken } from './websocket.utils'
-import { WebSocketModuleOptions, WebSocketModuleAsyncOptions } from './websocket.interface'
 import { Provider } from '@nestjs/common'
+import WebSocket from 'reconnecting-websocket'
 import { defer, lastValueFrom } from 'rxjs'
-import { WEBSOCKET_PROVIDER_NAME, WEBSOCKET_MODULE_OPTIONS } from './websocket.constants'
+import { WEBSOCKET_MODULE_OPTIONS, WEBSOCKET_PROVIDER_NAME } from './websocket.constants'
+import { WebSocketModuleAsyncOptions, WebSocketModuleOptions } from './websocket.interface'
+import { getWebSocketToken } from './websocket.utils'
 
 async function createWebSocket(_options: WebSocketModuleOptions): Promise<WebSocket> {
   try {
