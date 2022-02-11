@@ -1,4 +1,4 @@
-import * as WebSocket from 'ws'
+import WebSocket from 'reconnecting-websocket'
 import { getWebSocketToken } from './websocket.utils'
 import { WebSocketModuleOptions, WebSocketModuleAsyncOptions } from './websocket.interface'
 import { Provider } from '@nestjs/common'
@@ -13,7 +13,7 @@ async function createWebSocket(_options: WebSocketModuleOptions): Promise<WebSoc
     if (protocols) {
       ws = new WebSocket(url, protocols, options)
     } else {
-      ws = new WebSocket(url, options)
+      ws = new WebSocket(url, [], options)
     }
 
     return ws

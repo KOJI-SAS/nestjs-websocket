@@ -1,12 +1,10 @@
 import { ModuleMetadata } from '@nestjs/common'
-import { ClientRequestArgs } from 'http'
-import { ClientOptions } from 'ws'
-import { URL } from 'url'
+import { Options } from 'reconnecting-websocket'
 
 export interface WebSocketModuleOptions extends Record<string, any> {
-  url: string | URL
+  url: string
   protocols?: string | string[]
-  options?: ClientOptions | ClientRequestArgs
+  options?: Options
 }
 
 export interface WebSocketModuleAsyncOptions extends Pick<ModuleMetadata, 'imports' | 'providers'> {

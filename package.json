@@ -48,6 +48,7 @@
   "homepage": "https://github.com/blockcoders/nestjs-websocket/blob/main/README.md",
   "bugs": "https://github.com/blockcoders/nestjs-websocket/issues",
   "dependencies": {
+    "reconnecting-websocket": "^4.4.0",
     "ws": "^8.2.3"
   },
   "devDependencies": {
